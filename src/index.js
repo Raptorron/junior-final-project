@@ -12,6 +12,7 @@ import Schools from './school';
 import Students from './students';
 
 
+
 class _App extends Component{
   async componentDidMount(){
     this.props.getSchools();
@@ -21,9 +22,9 @@ class _App extends Component{
     return (
 
         <HashRouter>
-          <Route component={Nav}/>} />
+          <Route component={Nav}/>
           <Route path='/schools' component={Schools} />
-          <Route path='/students' component={Students} />} />
+          <Route path='/students' component={Students} />
         </HashRouter>
     )
   }

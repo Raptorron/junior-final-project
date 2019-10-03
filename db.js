@@ -38,12 +38,8 @@ const School = conn.define('school', {
     allowNull: false,
     validate: {notEmpty: true},
     unique: true
-  },
-  // imageURL: {
-  //   type: STRING,
-  //   defaultValue:
-  // }
-})
+  }
+});
 
 Student.belongsTo(School);
 School.hasMany(Student);
