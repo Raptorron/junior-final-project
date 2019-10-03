@@ -40,7 +40,8 @@ const School = conn.define('school', {
     unique: true
   },
   // imageURL: {
-  //   type: IMAGE
+  //   type: STRING,
+  //   defaultValue:
   // }
 })
 
