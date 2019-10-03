@@ -1,0 +1,151 @@
+<html>
+  <head>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/react-router-dom/5.0.1/react-router-dom.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.4/redux.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.3.0/redux-thunk.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/react-redux/7.1.1/react-redux.js'></script>
+    <script src="/dist/main.js" defer></script>
+<style>
+body {
+  font-family: verdana;
+}
+nav {
+  display: flex;
+  justify-content: space-around;
+}
+
+.selected {
+  background-color: tomato;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+input, button {
+  height: 2rem;
+  font-size: 1rem;
+}
+</style>
+  </head>
+  <body>
+    <div id='root'></div>
+    <script>
+
+
+      const { render } = ReactDOM;
+      const { Component } = React;
+      const { HashRouter, Route, Link, Switch, Redirect, NavLink } = ReactRouterDOM;
+      const { createStore, combineReducers, applyMiddleware } = Redux;
+      const { Provider, connect } = ReactRedux;
+
+      const GET_STUDENTS = 'GET_STUDENTS';
+
+      const GET_SCHOOLS = 'GET_SCHOOLS';
+
+      const schoolReducer = (state=[], action)=>{
+        if(action.type === GET_SCHOOLS){
+          return action.schools
+        }
+        return state
+      }
+      const studentReducer = (state=[], action)=>{
+        if(action.type === GET_STUDENTS){
+          return action.students
+        }
+        return state
+      }
+
+      const reducer = combineReducers({
+        schools: schoolReducer,
+        students: studentReducer
+      });
+
+      const store = createStore(reducer, applyMiddleware(ReduxThunk.default));
+
+      const getSchools = (schools) => ({type: GET_SCHOOLS, schools});
+      const getStudents = (students) => ({type: GET_STUDENTS, students});
+
+      const getSchoolsThunk = ()=>{
+        return async (dispatch)=>{
+          const schools = (await axios.get(`/api/schools`)).data
+          dispatch(getSchools(schools))
+        }
+      }
+      const getStudentsThunk = ()=>{
+        return async (dispatch)=>{
+          const students = (await axios.get('/api/students')).data
+          dispatch(getStudents(students))
+        }
+      }
+
+
+      const Nav = () =>{
+        return (
+          <nav>
+            <NavLink to='/schools' >Schools</NavLink>
+            <NavLink to='/students' >Students</NavLink>
+          </nav>
+        )
+      }
+
+      const Schools = ({students, schools})=>{
+        return (
+          <div>
+            <ul>
+              {
+                schools.map( school => <li key={school.id} >{school.name}</li>)
+              }
+            </ul>
+          </div>
+        )
+      }
+
+      const Students = ({students, schools}) => {
+        return (
+          <div>
+            <ul>
+              {
+                students.map( student => <li key={student.id} >First name: {student.firstName} Last name: {student.lastName} Email: {student.Email} GPA: {student.GPA}</li>)
+              }
+            </ul>
+          </div>
+        )
+      }
+
+      class App extends Component{
+        constructor(){
+          super()
+          this.state={
+            students: [],
+            schools: []
+          }
+        }
+        async componentDidMount(){
+          const responses = await Promise.all([
+            axios.get('api/schools'),
+            axios.get('api/students')
+          ]);
+          this.setState({schools: responses[0].data, students: responses[1].data})
+        }
+        render(){
+          const {students, schools} = this.state;
+          return (
+            <HashRouter>
+              <Route render={(props)=> <Nav {...props}/>} />
+                <Switch>
+                  <Route path='/schools' render={ ()=> <Schools students={students} schools={schools} />} />
+                  <Route path='/students' render={ ()=> <Students students={students} schools={schools} />} />
+              </Switch>
+            </HashRouter>
+          )
+        }
+      }
+
+      render(<App />, root);
+    </script>
+  </body>
+</html>
