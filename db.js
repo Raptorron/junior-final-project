@@ -10,19 +10,19 @@ const Student = conn.define('student', {
   },
   firstName: {
     type: STRING,
-    allowNull: false,
-    validate: {notEmpty: true},
+    // allowNull: false,
+    // validate: {notEmpty: true},
   },
   lastName: {
     type: STRING,
-    allowNull: false,
-    validate: {notEmpty: true},
+    // allowNull: false,
+    // validate: {notEmpty: true},
   },
   Email: {
     type: STRING,
-    allowNull: false,
-    validate: {notEmpty: true},
-    unique: true
+    // allowNull: false,
+    // validate: {notEmpty: true},
+    // unique: true
   },
   GPA: DECIMAL
 });
@@ -35,9 +35,9 @@ const School = conn.define('school', {
   },
   name: {
     type: STRING,
-    allowNull: false,
-    validate: {notEmpty: true},
-    unique: true
+    // allowNull: false,
+    // validate: {notEmpty: true},
+    // unique: true
   }
 });
 
@@ -65,6 +65,8 @@ const syncAndSeed =async()=>{
     {firstName: 'Carol', lastName: 'Franz', Email: 'cFranz@yahoo.com', GPA: 4.0, schoolId: mit.id },
     {firstName: 'Anna', lastName: 'Bosley', Email: 'aBosley@yahoo.com', GPA: 4.4, schoolId: mit.id },
     {firstName: 'Lily', lastName: 'Keen', Email: 'lKeen@yahoo.com', GPA: 4.8, schoolId: harvard.id },
+    {firstName: 'Fill', lastName: 'Talor', Email: 'fTalor@yahoo.com', GPA: 4.6, schoolId: harvard.id },
+
   ];
   const [bLane, mLang, aDavis, cGomez, cFranz, aBosley, lKeen] = await Promise.all(students.map(student => Student.create(student)));
 }

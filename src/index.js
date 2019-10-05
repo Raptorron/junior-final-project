@@ -10,8 +10,9 @@ import Nav from './nav';
 import store, {getSchoolsThunk, getStudentsThunk} from './store';
 import Schools from './school';
 import Students from './students';
-
-
+import Home from './home'
+import mostPopular from './mostPopular';
+import topSchool from './topSchool';
 
 class _App extends Component{
   async componentDidMount(){
@@ -23,8 +24,11 @@ class _App extends Component{
 
         <HashRouter>
           <Route component={Nav}/>
+          <Route path='/' component={Home} exact/>
           <Route path='/schools' component={Schools} />
           <Route path='/students' component={Students} />
+          <Route path='/mostPopular' component={mostPopular}/>
+          <Route path='/topSchool' component={topSchool}/>
         </HashRouter>
     )
   }
