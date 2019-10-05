@@ -34,18 +34,35 @@ class _Students extends Component{
     await this.props.toUpdate(student)
   }
   render(){
+    // console.log(this.props.students)
   return (
     <div>
       <form onSubmit={ev => ev.preventDefault()} className='application'>
         <div>First Name: <input value={this.state.firstName} placeholder='first name' onChange={ev=> this.setState({firstName: ev.target.value})}/></div>
         <div>Last Name: <input value={this.state.lastName} placeholder='last name' onChange={ev=> this.setState({lastName: ev.target.value})}/></div>
         <div>Email: <input value={this.state.Email} placeholder='email' onChange={ev=> this.setState({Email: ev.target.value})}/></div>
-        <div>GPA: <input value={this.state.GPA} placeholder='GPA' onChange={ev=> this.setState({GPA: ev.target.value})}/></div>
-        <div><select value={}>
+        <div>GPA: <input value={this.state.GPA} placeholder='GPA' onChange={ev=> this.setState({GPA: ev.target.value})}/>
+        </div>
+
+
+
+
+
+        <div>
+          <select selected={this.state ? this.state.schoolId : '-- not Enrolled --'}
+          onChange={ev = this.update(ev.target.selected)}
+          >
+          <option value='-- not Enrolled --' >-- not Enrolled --</option>
           {
-            ['-- not Enrolled --', 'Harvard', 'MIT', 'Stanford', 'UCLA', 'UC Berkley', 'UC Davis'].map((school, idx) => <option key={idx}>{school}</option>)
+            this.props.schools.map((school) => <option key={school.id} value={school.name} >{school.name}</option>)
           }
-          </select></div>
+          </select>
+        </div>
+
+
+
+
+
         <button onClick={this.create}>Add Student</button>
         <div>
         <div className='ordering'>
