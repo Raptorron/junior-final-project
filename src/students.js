@@ -21,7 +21,8 @@ class _Students extends Component{
       error: ''
     }
     this.create = this.create.bind(this);
-    this.destroy = this.destroy.bind(this)
+    this.destroy = this.destroy.bind(this);
+    this.update = this.update.bind(this);
   }
   async create(){
     await this.props.toCreate(this.state);
@@ -29,7 +30,10 @@ class _Students extends Component{
   async destroy(student){
     await this.props.toDestroy(student);
   }
-  render(students, schools){
+  async update(student){
+    await this.props.toUpdate(student)
+  }
+  render(){
   return (
     <div>
       <form onSubmit={ev => ev.preventDefault()} className='application'>
@@ -37,7 +41,7 @@ class _Students extends Component{
         <div>Last Name: <input value={this.state.lastName} placeholder='last name' onChange={ev=> this.setState({lastName: ev.target.value})}/></div>
         <div>Email: <input value={this.state.Email} placeholder='email' onChange={ev=> this.setState({Email: ev.target.value})}/></div>
         <div>GPA: <input value={this.state.GPA} placeholder='GPA' onChange={ev=> this.setState({GPA: ev.target.value})}/></div>
-        <div><select>
+        <div><select value={}>
           {
             ['-- not Enrolled --', 'Harvard', 'MIT', 'Stanford', 'UCLA', 'UC Berkley', 'UC Davis'].map((school, idx) => <option key={idx}>{school}</option>)
           }
