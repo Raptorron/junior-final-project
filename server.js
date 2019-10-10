@@ -19,7 +19,10 @@ app.get('/api/students', (req, res, next)=> {
     .then(item => res.send(item))
     .catch(next)
 })
-app.post('/api/students/', (req, res, next)=> {
+app.post('/api/students/', async (req, res, next)=> {
+  const school = await db.model.School.findAll({where: {name: req.body.school}});
+  req.body.schoolId = school.id
+  console.log(req.body)
   db.model.Student.create(req.body)
     .then(item => res.status(201).send(item))
     .catch(next)
@@ -45,23 +48,7 @@ app.get('/api/schools', (req, res, next)=> {
     .then(item => res.send(item))
     .catch(next)
 })
-app.post('/api/schools', (req, res, next)=> {
-  db.model.Student.create(req.body)
-    .then(item => res.status(201).send(item))
-    .catch(next)
-})
-app.delete('/api/schools/:id', (req, res, next)=> {
-  db.model.Student.findByPk(req.params.id)
-    .then(item => item.destroy())
-    .then(item => res.sendStatus(204))
-    .catch(next)
-})
-app.put('/api/schools:id', (req, res, next)=> {
-  db.model.Student.findByPk(req.params.id)
-    .then(item => item.update(req.body))
-    .then(item => res.send(item))
-    .catch(next)
-})
+
 
 
 db.syncAndSeed()

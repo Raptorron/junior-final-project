@@ -18,7 +18,8 @@ class _Students extends Component{
       lastName: '',
       Email: '',
       GPA: '',
-      error: ''
+      error: '',
+      school: ''
     }
     this.create = this.create.bind(this);
     this.destroy = this.destroy.bind(this);
@@ -49,12 +50,12 @@ class _Students extends Component{
 
 
         <div>
-          <select selected={this.state ? this.state.schoolId : '-- not Enrolled --'}
-          onChange={ev = this.update(ev.target.selected)}
+          <select name='school'
+          onChange={ev=> this.setState({school: ev.target.value})}
           >
-          <option value='-- not Enrolled --' >-- not Enrolled --</option>
+          <option >-- not Enrolled --</option>
           {
-            this.props.schools.map((school) => <option key={school.id} value={school.name} >{school.name}</option>)
+            this.props.schools.map((school) => <option key={school.id}  >{school.name}</option>)
           }
           </select>
         </div>
@@ -67,19 +68,25 @@ class _Students extends Component{
         <div>
         <div className='ordering'>
           {
-            this.props.students.map( student => <div key={student.id} className='student' >{student.firstName} {student.lastName}
-            <br />
-            {student.GPA}
-            <br />
-            <select>
-            {
-              ['-- not enrolled --', 'Havard', 'MIT', 'Stanford', 'UCLA', 'UC Berkley', 'UC Davis'].map((school, idx) => <option key={idx}>{school}</option>)
-            }
-            </select>
-            <br />
-            <button onClick={()=> this.destroy(student)}>Destroy Student</button>
-            <br />
-            </div>)
+            this.props.students.map( student => {
+              const school = this.props.schools.find(school => school.id === student.schoolId)
+            return (
+              <div>
+                <div key={student.id} className='student' >{student.firstName} {student.lastName}
+                <br />
+                {student.GPA}
+                <br />
+                <select onChange={ev => this.setState({school: ev.target.value})} >
+                {
+                  this.props.schools.map((school, idx) => <option key={idx} value={student} >{school.name}</option>)
+                }
+                </select>
+                <br />
+                <button onClick={()=> this.destroy(student)}>Destroy Student</button>
+                <br />
+                </div>
+              </div>
+            )})
           }
         </div>
         </div>

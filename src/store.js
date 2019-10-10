@@ -62,6 +62,7 @@ const getStudentsThunk = ()=>{
   }
 }
 const createStudentThunk = (student)=>{
+  console.log(student)
   return async (dispatch)=>{
     const created = (await axios.post('/api/students', student)).data
     dispatch(createStudent(created))
